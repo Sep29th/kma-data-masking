@@ -40,6 +40,12 @@ app.whenReady().then(() => {
         }
       });
   });
+  mainWindow.on("maximize", () => {
+    mainWindow.webContents.send("window-maximize")
+  });
+  mainWindow.on("unmaximize", () => {
+    mainWindow.webContents.send("window-restore")
+  })
   ipcMain.handle("window-state", () => {
     return mainWindow.isMinimized();
   });

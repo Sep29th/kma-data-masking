@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { ConfigProvider, Layout, theme } from "antd";
+import { ConfigProvider, Layout, Spin, theme } from "antd";
 import { ConfigRoute } from "./routes";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -13,7 +13,10 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
-      dispatch(switchThemeMode(await window.electron.ipcRenderer.invoke('main:post-switch-theme-mode')));
+      const data = await window.electron.ipcRenderer.invoke("main:post-switch-theme-mode");
+      setTimeout(() => {
+        dispatch(switchThemeMode(data));
+      }, 1500);
     })();
   }, []);
   return (
@@ -32,9 +35,7 @@ const App = () => {
                 Layout: {
                   siderBg: "#252526"
                 },
-                Button: {
-
-                }
+                Button: {}
               }
             }}
           >
@@ -43,7 +44,20 @@ const App = () => {
           </ConfigProvider>
         </div>
       ) : (
-        <h1>Loading</h1>
+        <div style={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#3C3C3C"
+        }}>
+          <div className="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       )}
     </>
   );

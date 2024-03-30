@@ -11,6 +11,12 @@ const TitleBar = () => {
     (async () => {
       setIsMinimized(await window.electron.ipcRenderer.invoke("window-state"));
     })();
+    window.electron.ipcRenderer.on("window-maximize", () => {
+      setIsMinimized(true);
+    });
+    window.electron.ipcRenderer.on("window-restore", () => {
+      setIsMinimized(false);
+    });
   }, []);
   return (
     <div style={{
@@ -52,15 +58,15 @@ const TitleBar = () => {
           }
         }}>
           {isMinimized ? <Button onClick={() => {
-            window.electron.ipcRenderer.send("restore-down-btn")
-            setIsMinimized((isMinimized) => !isMinimized)
+            window.electron.ipcRenderer.send("restore-down-btn");
+            setIsMinimized((isMinimized) => !isMinimized);
           }} shape={"circle"} size={"small"} style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center"
           }}><VscChromeRestore /></Button> : <Button onClick={() => {
-            window.electron.ipcRenderer.send("maximize-btn")
-            setIsMinimized((isMinimized) => !isMinimized)
+            window.electron.ipcRenderer.send("maximize-btn");
+            setIsMinimized((isMinimized) => !isMinimized);
           }} shape={"circle"} size={"small"} style={{
             display: "flex",
             justifyContent: "center",
