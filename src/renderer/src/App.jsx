@@ -1,4 +1,4 @@
-import "./App.css";
+ import "./App.css";
 
 import { ConfigProvider, Layout, Spin, theme } from "antd";
 import { ConfigRoute } from "./routes";
@@ -29,13 +29,18 @@ const App = () => {
         }}>
           <ConfigProvider
             theme={{
-              algorithm: themeMode.render === "dark" ? theme.darkAlgorithm : theme.compactAlgorithm,
-              token: {},
+              algorithm: themeMode.render === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
+              token: {
+                colorPrimary: "#26A6A3"
+              },
               components: {
                 Layout: {
-                  siderBg: "#252526"
+                  siderBg: "#252526",
+                  headerBg: "#1E1E1E"
                 },
-                Button: {}
+                Drawer: {
+                  zIndexPopup: 998
+                }
               }
             }}
           >

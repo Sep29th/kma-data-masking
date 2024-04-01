@@ -4,6 +4,7 @@ import { electronApp, optimizer } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import { main } from "../ipcs/main";
 import { createWindow } from "../windows/main.window";
+import * as fs from "fs-extra";
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId("com.electron");
@@ -12,12 +13,13 @@ app.whenReady().then(() => {
   });
   main();
   let mainWindow = createWindow("main", {
-    width: 900,
-    height: 670,
+    width: 1800,
+    height: 1010,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     titleBarStyle: "hidden",
+    icon: icon,
     webPreferences: {
       devTools: true,
       preload: join(__dirname, "../preload/index.js"),
@@ -27,12 +29,13 @@ app.whenReady().then(() => {
   app.on("activate", function() {
     if (BrowserWindow.getAllWindows().length === 0)
       mainWindow = createWindow("main", {
-        width: 900,
-        height: 670,
+        width: 1800,
+        height: 1010,
         show: false,
         autoHideMenuBar: true,
         ...(process.platform === "linux" ? { icon } : {}),
         titleBarStyle: "hidden",
+        icon: icon,
         webPreferences: {
           devTools: true,
           preload: join(__dirname, "../preload/index.js"),
@@ -40,16 +43,22 @@ app.whenReady().then(() => {
         }
       });
   });
+  try {
+    if(fs.readJSONSync("./window-state.json").isMaximized) mainWindow.maximize()
+  } catch (err) {
+    fs.writeJSONSync("./window-state.json", { isMaximized: mainWindow.isMaximized() });
+  }
   mainWindow.on("maximize", () => {
-    mainWindow.webContents.send("window-maximize")
+    mainWindow.webContents.send("window-maximize");
   });
   mainWindow.on("unmaximize", () => {
-    mainWindow.webContents.send("window-restore")
-  })
+    mainWindow.webContents.send("window-restore");
+  });
   ipcMain.handle("window-state", () => {
-    return mainWindow.isMinimized();
+    return mainWindow.isMaximized();
   });
   ipcMain.on("close-btn", () => {
+    fs.writeJSONSync("./window-state.json", { isMaximized: mainWindow.isMaximized() });
     mainWindow.close();
     setTimeout(app.quit, 100);
   });

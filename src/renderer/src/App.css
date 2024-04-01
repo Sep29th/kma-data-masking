@@ -68,3 +68,12 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #252526;
+  border-radius: 5px;
+}
+
