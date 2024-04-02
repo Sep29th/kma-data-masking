@@ -1,23 +1,28 @@
-import { ConfigProvider, Tabs, theme } from "antd";
-import CodeEditer from "../CodeEditer";
-import StickyBox from "react-sticky-box";
+import { Button, Tabs, theme } from 'antd'
+import CodeEditer from '../CodeEditer'
+import StickyBox from 'react-sticky-box'
+import { useState } from 'react'
+import { VscRunAbove } from 'react-icons/vsc'
+import { Tooltip } from 'antd'
+import Authorization from '../Authorization'
 
 const MainContent = () => {
+  const [currentTab, setCurrentTab] = useState('1')
   const items = [
     {
-      key: "1",
-      label: "Console",
+      key: '1',
+      label: 'Console',
       children: <CodeEditer />
     },
     {
-      key: "2",
-      label: "Authorization",
-      children: <h2>hehe</h2>
+      key: '2',
+      label: 'Authorization',
+      children: <Authorization />
     }
-  ];
+  ]
   const {
     token: { colorBgContainer }
-  } = theme.useToken();
+  } = theme.useToken()
   const renderTabBar = (props, DefaultTabBar) => (
     <StickyBox
       offsetTop={0}
@@ -32,19 +37,37 @@ const MainContent = () => {
         }}
       />
     </StickyBox>
-  );
+  )
   return (
-    <ConfigProvider theme={{ token: { borderRadius: 0 }, components: { Tabs: { cardPadding: "2px 20px", cardGutter: -1 } } }}>
-      <Tabs
-        defaultActiveKey="1"
-        type="card"
-        size={"middle"}
-        renderTabBar={renderTabBar}
-        items={items}
-        style={{ width: "100%", height: "100%", overflow: "auto" }}
-      />
-    </ConfigProvider>
-  );
-};
+    <Tabs
+      defaultActiveKey="1"
+      type="card"
+      size={'middle'}
+      onChange={(key) => setCurrentTab(key)}
+      renderTabBar={renderTabBar}
+      items={items}
+      tabBarExtraContent={{
+        right: currentTab === '1' && (
+          <Tooltip placement="left" title="Execute">
+            <Button
+              size="small"
+              shape="circle"
+              type="primary"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 20
+              }}
+            >
+              <VscRunAbove />
+            </Button>
+          </Tooltip>
+        )
+      }}
+      style={{ width: '100%', height: '100%', overflow: 'auto' }}
+    />
+  )
+}
 
-export default MainContent;
+export default MainContent

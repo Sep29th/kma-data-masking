@@ -18,5 +18,5 @@ export function createWindow(id, option) {
   } else {
     mainWindow.loadFile(...createFileRoute(join(__dirname, '../renderer/index.html'), id)).then()
   }
-  return mainWindow;
+  return mainWindow
 }

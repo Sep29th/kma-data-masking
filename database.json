@@ -1,0 +1,53 @@
+{
+  "databases": [
+    {
+      "_id": "1",
+      "type": "mysql",
+      "host": "127.0.0.1",
+      "port": 3306,
+      "username": "root",
+      "password": "root",
+      "database": "awesome-nestjs",
+      "_users": ["1", "2"],
+      "_groups": ["1"],
+      "schema": [
+        {
+          "name": "user",
+          "columns": [
+            {
+              "name": "email",
+              "display": "email"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "_id": "1",
+      "role": "admin",
+      "username": "sep29th",
+      "password": "abcdef",
+      "_databases": "1",
+      "personal_permission": "all"
+    },
+    {
+      "_id": "2",
+      "role": "user",
+      "username": "qwerty",
+      "password": "abcdef",
+      "_databases": "1",
+      "personal_permission": ["create", "read", "update", "delete"],
+      "_groups": "1"
+    }
+  ],
+  "groups": [
+    {
+      "_id": "1",
+      "permission": ["create", "read"],
+      "_databases": "1",
+      "_users": ["2"]
+    }
+  ]
+}
