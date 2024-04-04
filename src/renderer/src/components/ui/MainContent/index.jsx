@@ -1,28 +1,28 @@
-import { Button, Tabs, theme } from 'antd'
-import CodeEditer from '../CodeEditer'
-import StickyBox from 'react-sticky-box'
-import { useState } from 'react'
-import { VscRunAbove } from 'react-icons/vsc'
-import { Tooltip } from 'antd'
-import Authorization from '../Authorization'
+import { Button, Tabs, theme } from "antd";
+import CodeEditer from "../CodeEditer";
+import StickyBox from "react-sticky-box";
+import { useState } from "react";
+import { VscRunAbove } from "react-icons/vsc";
+import { Tooltip } from "antd";
+import Authorization from "../Authorization";
 
+const items = [
+  {
+    key: "1",
+    label: "Console",
+    children: <CodeEditer />
+  },
+  {
+    key: "2",
+    label: "Authorization",
+    children: <Authorization />
+  }
+];
 const MainContent = () => {
-  const [currentTab, setCurrentTab] = useState('1')
-  const items = [
-    {
-      key: '1',
-      label: 'Console',
-      children: <CodeEditer />
-    },
-    {
-      key: '2',
-      label: 'Authorization',
-      children: <Authorization />
-    }
-  ]
+  const [currentTab, setCurrentTab] = useState("1");
   const {
     token: { colorBgContainer }
-  } = theme.useToken()
+  } = theme.useToken();
   const renderTabBar = (props, DefaultTabBar) => (
     <StickyBox
       offsetTop={0}
@@ -37,26 +37,28 @@ const MainContent = () => {
         }}
       />
     </StickyBox>
-  )
+  );
   return (
     <Tabs
       defaultActiveKey="1"
       type="card"
-      size={'middle'}
-      onChange={(key) => setCurrentTab(key)}
+      size={"middle"}
+      onChange={(key) => {
+        setCurrentTab(key);
+      }}
       renderTabBar={renderTabBar}
       items={items}
       tabBarExtraContent={{
-        right: currentTab === '1' && (
+        right: currentTab === "1" && (
           <Tooltip placement="left" title="Execute">
             <Button
               size="small"
               shape="circle"
               type="primary"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 marginRight: 20
               }}
             >
@@ -65,9 +67,9 @@ const MainContent = () => {
           </Tooltip>
         )
       }}
-      style={{ width: '100%', height: '100%', overflow: 'auto' }}
+      style={{ width: "100%", height: "100%", overflow: "auto" }}
     />
-  )
-}
+  );
+};
 
-export default MainContent
+export default MainContent;
