@@ -1,9 +1,10 @@
-import { Modal, Form, Input, ConfigProvider, Tree, Row, Col } from 'antd'
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai'
-import { Divider } from 'antd'
-import { Descriptions } from 'antd'
+import { Modal, Form, Input, ConfigProvider, Tree, Row, Col, Alert } from "antd";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
+import { Divider } from "antd";
+import { Descriptions } from "antd";
+import { LoginToDB } from "../../../services/login-to-db.ipc";
 
 const updateTreeData = (list, key, children) =>
   list.map((node) => {
@@ -11,21 +12,23 @@ const updateTreeData = (list, key, children) =>
       return {
         ...node,
         children
-      }
+      };
     }
     if (node.children) {
       return {
         ...node,
         children: updateTreeData(node.children, key, children)
-      }
+      };
     }
-    return node
-  })
+    return node;
+  });
 const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
-  const currentDatabase = useSelector((state) => state.updateCurrentDatabase)
-  const [loginModal, setLoginModal] = useState(false)
-  const [databaseInfo, setDatabaseInfo] = useState({ info: [] })
-  const [form] = Form.useForm()
+  const currentDatabase = useSelector((state) => state.updateCurrentDatabase);
+  const [loginModal, setLoginModal] = useState(false);
+  const [databaseInfo, setDatabaseInfo] = useState({ info: [] });
+  const [dbInfoForLogin, setDbInfoForLogin] = useState({});
+  const [form] = Form.useForm();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const delay = (expandedKeys) =>
     new Promise((resolve) => {
@@ -33,39 +36,49 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
         setTreeDb((origin) =>
           updateTreeData(origin, expandedKeys, [
             {
-              title: 'Child Node',
+              title: "Child Node",
               key: `${expandedKeys}-0`
             },
             {
-              title: 'Child Node',
+              title: "Child Node",
               key: `${expandedKeys}-1`
             }
           ])
-        )
-        resolve()
-      }, 1000)
-    })
+        );
+        resolve();
+      }, 1000);
+    });
 
   const onExpand = async (expandedKeys, { node }) => {
-    const [type, _id, host, port, username, password, database] = expandedKeys[0].split(':')
+    const [type, _id, host, port, username, password, database] = expandedKeys[0].split(":");
     setDatabaseInfo({
       info: [type, host, port, database],
       key: Object.keys({ type, host, port, database })
-    })
+    });
+    setDbInfoForLogin({
+      type: type,
+      _id: _id,
+      host: host,
+      port: port,
+      username: username,
+      password: password,
+      database: database
+    });
     if (currentDatabase === null || database !== currentDatabase.name) {
-      setLoginModal(true)
-      setExpanded([])
+      setLoginModal(true);
+      setExpanded([]);
     } else {
       if (!node.children) {
-        await delay(node.key)
+        await delay(node.key);
       }
-      setExpanded(expandedKeys)
+      setExpanded(expandedKeys);
     }
-  }
+  };
 
-  const onFinish = (value) => {
-    console.log(value)
-  }
+  const onFinish = async (value) => {
+    const tmp = await LoginToDB({ db: dbInfoForLogin, auth: value });
+    setErrorMessage(tmp)
+  };
 
   return (
     <>
@@ -73,7 +86,7 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
         <ConfigProvider
           theme={{
             token: {
-              colorBgContainer: '#252526'
+              colorBgContainer: "#252526"
             }
           }}
         >
@@ -88,13 +101,13 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
         </ConfigProvider>
       </div>
       <Modal
-        width={'50vw'}
+        width={"50vw"}
         onOk={() => form.submit()}
         onCancel={() => setLoginModal(false)}
         maskClosable={false}
         open={loginModal}
         centered
-        okText={'Submit'}
+        okText={"Submit"}
       >
         <Row gutter={[15, 0]}>
           <Col span={12}>
@@ -106,7 +119,7 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
                   key: id,
                   label: databaseInfo.key[id],
                   children: it
-                }
+                };
               })}
             />
           </Col>
@@ -126,7 +139,7 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Username!'
+                    message: "Please input your Username!"
                   }
                 ]}
               >
@@ -141,7 +154,7 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Password!'
+                    message: "Please input your Password!"
                   }
                 ]}
               >
@@ -153,11 +166,17 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
                 />
               </Form.Item>
             </Form>
+            {errorMessage && <Alert
+              message="Error"
+              description={errorMessage}
+              type="error"
+              showIcon
+            />}
           </Col>
         </Row>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default TreeDatabase
+export default TreeDatabase;
