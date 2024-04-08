@@ -1,0 +1,8 @@
+[
+  {
+    "_id": "1",
+    "permission": ["create"],
+    "_databases": "1",
+    "_users": ["2"]
+  }
+]

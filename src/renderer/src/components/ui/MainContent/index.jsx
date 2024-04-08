@@ -1,25 +1,33 @@
 import { Button, Tabs, theme } from 'antd'
 import CodeEditer from '../CodeEditer'
 import StickyBox from 'react-sticky-box'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { VscRunAbove } from 'react-icons/vsc'
 import { Tooltip } from 'antd'
 import Authorization from '../Authorization'
+import { useSelector } from 'react-redux'
+import { RunQuery } from '../../../services/run-query'
+import { useDispatch } from 'react-redux'
+import { applyResult } from '../../../redux/actions/result-query'
 
-const items = [
-  {
-    key: '1',
-    label: 'Console',
-    children: <CodeEditer />
-  },
-  {
-    key: '2',
-    label: 'Authorization',
-    children: <Authorization />
-  }
-]
 const MainContent = () => {
   const [currentTab, setCurrentTab] = useState('1')
+  const currentUser = useSelector((state) => state.updateCurrentUser)
+  const codeEditor = useRef(null)
+  const dispatch = useDispatch()
+  const items = [
+    {
+      key: '1',
+      label: 'Console',
+      children: <CodeEditer ref={codeEditor} />
+    }
+  ]
+  if (currentUser.role === 'admin')
+    items.push({
+      key: '2',
+      label: 'Authorization',
+      children: <Authorization />
+    })
   const {
     token: { colorBgContainer }
   } = theme.useToken()
@@ -38,6 +46,14 @@ const MainContent = () => {
       />
     </StickyBox>
   )
+  const handleRunConsole = async () => {
+    let selectionText = codeEditor.current.view.viewState.state.selection.ranges
+      .map((i) => codeEditor.current.view.viewState.state.sliceDoc(i.from, i.to))
+      .join('; ')
+    if (!selectionText) selectionText = codeEditor.current.view.viewState.state.sliceDoc()
+    const result = await RunQuery(selectionText, currentUser)
+    dispatch(applyResult(result))
+  }
   return (
     <Tabs
       defaultActiveKey="1"
@@ -52,6 +68,8 @@ const MainContent = () => {
         right: currentTab === '1' && (
           <Tooltip placement="left" title="Execute">
             <Button
+              onClick={handleRunConsole}
+              id={'BUTTON_RUN_QUERY'}
               size="small"
               shape="circle"
               type="primary"

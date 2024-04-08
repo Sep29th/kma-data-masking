@@ -11,7 +11,7 @@ const HeaderContent = () => {
   const currentUser = useSelector((state) => state.updateCurrentUser)
   let items = [{ title: <BsDatabase /> }]
   if (currentDatabase) items.push({ title: currentDatabase.name })
-  if (currentUser) items.push({ title: currentUser.name })
+  if (currentUser) items.push({ title: currentUser.role }, { title: currentUser.username })
   const showDrawer = () => {
     setOpen(true)
   }

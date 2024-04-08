@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "1",
+    "role": "admin",
+    "username": "sep29th",
+    "password": "abcdef",
+    "_databases": "1",
+    "personal_permission": "all"
+  },
+  {
+    "_id": "2",
+    "role": "user",
+    "username": "qwerty",
+    "password": "abcdef",
+    "_databases": "1",
+    "personal_permission": ["update", "delete"],
+    "_groups": "1"
+  },
+  {
+    "_id": "3",
+    "role": "admin",
+    "username": "admin",
+    "password": "admin",
+    "_databases": "1",
+    "personal_permission": "all"
+  }
+]

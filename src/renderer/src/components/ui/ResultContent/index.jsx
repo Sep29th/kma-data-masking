@@ -1,14 +1,27 @@
 import { ConfigProvider } from 'antd'
-import { Tabs, theme } from 'antd'
+import { Tabs } from 'antd'
 import StickyBox from 'react-sticky-box'
 import TableResult from '../TableResult'
+import { useSelector } from 'react-redux'
+
+const ResultText = () => {
+  const data = useSelector((state) => state.queryResult)
+  return (
+    <div style={{ paddingLeft: 25 }}>
+      {data.tabOneContent.map((i) => (
+        <h4>{i}</h4>
+      ))}
+    </div>
+  )
+}
 
 const ResultContent = () => {
+  const activeTab = useSelector((state) => state.queryResult)
   const items = [
     {
       key: '1',
       label: 'Result',
-      children: <h2 style={{ margin: 0 }}>result</h2>
+      children: <ResultText />
     },
     {
       key: '2',
@@ -38,6 +51,7 @@ const ResultContent = () => {
         tabBarExtraContent={{
           left: <span style={{ width: '25px', display: 'inline-block' }}></span>
         }}
+        activeKey={activeTab.activeTab}
         size={'middle'}
         renderTabBar={renderTabBar}
         items={items}

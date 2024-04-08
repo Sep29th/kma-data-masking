@@ -1,4 +1,4 @@
-import { Button, Layout, Modal } from 'antd'
+import { Button, Layout, Modal, Form, Tag, Row, Col, Input } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GrMysql } from 'react-icons/gr'
@@ -8,7 +8,6 @@ import { BsDatabaseAdd, BsDatabase } from 'react-icons/bs'
 import { AiOutlineMinus } from 'react-icons/ai'
 import TreeDatabase from '../TreeDatabase'
 import { GetSavedDatabase } from '../../../services/get-saved-database.ipc'
-import { Tag } from 'antd'
 
 const SideBar = ({ width }) => {
   const themeMode = useSelector((state) => state.switchThemeMode)
@@ -16,6 +15,16 @@ const SideBar = ({ width }) => {
   const [addDatabaseModal, setAddDatabaseModal] = useState(false)
   const [expanded, setExpanded] = useState([])
   const [treeDb, setTreeDb] = useState([])
+  const [form] = Form.useForm()
+  const [resetTreeDB, setResetTreeDB] = useState(false)
+  const handleSubmit = () => {
+    form.submit()
+    setAddDatabaseModal(false)
+  }
+  const handleSubmitForm = async (values) => {
+    await window.electron.ipcRenderer.invoke('main:post-add-database', values)
+    setResetTreeDB((resetTreeDB) => !resetTreeDB)
+  }
   useEffect(() => {
     ;(async () => {
       setTreeDb(
@@ -30,18 +39,13 @@ const SideBar = ({ width }) => {
                 title: 'Tables',
                 key: `${item.type}:${item._id}:${item.host}:${item.port}:${item.username}:${item.password}:${item.database}:tables`,
                 isLeaf: false
-              },
-              {
-                title: 'Manager',
-                key: `${item.type}:${item._id}:${item.host}:${item.port}:${item.username}:${item.password}:${item.database}:manager`,
-                isLeaf: true
               }
             ]
           }
         })
       )
     })()
-  }, [])
+  }, [resetTreeDB])
   return (
     <>
       <Sider
@@ -101,15 +105,49 @@ const SideBar = ({ width }) => {
         )}
       </Sider>
       <Modal
-        title="Vertically centered modal dialog"
+        title="Add database"
         centered
+        width={'50vw'}
         open={addDatabaseModal}
-        onOk={() => setAddDatabaseModal(false)}
+        onOk={handleSubmit}
         onCancel={() => setAddDatabaseModal(false)}
       >
-        <p>some contents...</p>
-        <p>some contents...</p>
-        <p>some contents...</p>
+        <Form layout={'vertical'} form={form} onFinish={handleSubmitForm}>
+          <Row gutter={[15, 0]}>
+            <Col span={12}>
+              <Form.Item label={'Host'} name={'host'} rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label={'Port'} name={'port'} rules={[{ required: true }]}>
+                <Input type={'number'} />
+              </Form.Item>
+              <Form.Item label={'Database'} name={'database'} rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label={'Username'} name={'username'} rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label={'Password'} name={'password'} rules={[{ required: true }]}>
+                <Input type={'password'} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label={'Login admin name'} name={'admin'} rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label={'Login admin password'}
+                name={'adminPass'}
+                rules={[{ required: true }]}
+              >
+                <Input type={'password'} />
+              </Form.Item>
+              <Form.Item label={'Key for masking'} name={'key'} rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Modal>
     </>
   )
