@@ -3,17 +3,17 @@
     "_id": "1",
     "type": "mysql",
     "host": "127.0.0.1",
-    "port": 3306,
+    "port": "3306",
     "username": "root",
     "password": "root",
     "database": "awesome-nestjs",
-    "key": "testkey",
-    "_users": ["1", "2"],
-    "_groups": ["1"],
+    "key": "hoang",
     "schema": [
-      { "name": "refreshToken", "display": "random" },
-      { "name": "email", "display": "email" }
-    ]
+      { "name": "password", "display": "hide" },
+      { "name": "refreshToken", "display": "random" }
+    ],
+    "_users": ["1", "2"],
+    "_groups": ["1"]
   },
   {
     "_id": "2",
@@ -22,8 +22,21 @@
     "port": "3306",
     "username": "root",
     "password": "root",
-    "database": "test",
-    "key": "admin",
-    "_users": ["2"]
+    "database": "aklsjdlkasjd",
+    "key": "hoang",
+    "schema": [],
+    "_users": ["3"]
+  },
+  {
+    "_id": "3",
+    "type": "mysql",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "username": "root",
+    "password": "root",
+    "database": "aklsjdlkasjd",
+    "key": "hoang",
+    "schema": [],
+    "_users": ["4"]
   }
 ]

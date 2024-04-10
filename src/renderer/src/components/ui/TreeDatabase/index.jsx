@@ -101,6 +101,7 @@ const TreeDatabase = ({ expanded, setExpanded, treeDb, setTreeDb }) => {
       dispatch(updateCurrentUser(tmp.user))
       dispatch(updateCurrentDatabase(tmp.database))
       targetExpand && setExpanded([targetExpand])
+      form.resetFields()
       setLoginModal(false)
     } else {
       setErrorMessage(tmp)

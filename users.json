@@ -8,20 +8,27 @@
     "personal_permission": "all"
   },
   {
-    "_id": "2",
-    "role": "user",
     "username": "qwerty",
     "password": "abcdef",
-    "_databases": "1",
     "personal_permission": ["update", "delete"],
-    "_groups": "1"
+    "_databases": "1",
+    "role": "user",
+    "_id": "2"
   },
   {
     "_id": "3",
     "role": "admin",
-    "username": "admin",
-    "password": "admin",
-    "_databases": "1",
+    "username": "sep29th",
+    "password": "abcdef",
+    "_databases": "2",
+    "personal_permission": "all"
+  },
+  {
+    "_id": "4",
+    "role": "admin",
+    "username": "sep29th",
+    "password": "abcdef",
+    "_databases": "3",
     "personal_permission": "all"
   }
 ]

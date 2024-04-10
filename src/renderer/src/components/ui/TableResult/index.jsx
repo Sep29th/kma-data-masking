@@ -22,17 +22,17 @@ const TableResult = () => {
                         menu={{
                           items: [
                             {
+                              key: 'unmask',
+                              label: 'Unmask this column'
+                            },
+                            {
                               key: '1',
                               label: 'Mask this column',
                               children: [
                                 { key: 'email', label: 'Email' },
                                 { key: 'phone', label: 'Phone number' },
-                                {
-                                  key: 'hide',
-                                  label: 'Hide all'
-                                },
-                                { key: 'random', label: 'Random String' },
-                                { key: 'static', label: 'Static string' }
+                                { key: 'hide', label: 'Hide all' },
+                                { key: 'random', label: 'Random String' }
                               ]
                             }
                           ],

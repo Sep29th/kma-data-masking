@@ -7,3 +7,9 @@ export const applyResult = (result) => {
     }
   }
 }
+
+export const resetResult = () => {
+  return {
+    type: 'RESET_RESULT_QUERY'
+  }
+}

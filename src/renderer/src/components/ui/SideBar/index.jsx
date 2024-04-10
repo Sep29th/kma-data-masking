@@ -1,13 +1,16 @@
-import { Button, Layout, Modal, Form, Tag, Row, Col, Input } from 'antd'
+import { Button, Layout, Modal, Form, Tag, Row, Col, Input, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { GrMysql } from 'react-icons/gr'
 
 const { Sider } = Layout
 import { BsDatabaseAdd, BsDatabase } from 'react-icons/bs'
-import { AiOutlineMinus } from 'react-icons/ai'
+import { AiOutlineLogout, AiOutlineMinus } from 'react-icons/ai'
 import TreeDatabase from '../TreeDatabase'
 import { GetSavedDatabase } from '../../../services/get-saved-database.ipc'
+import { updateCurrentUser } from '../../../redux/actions/update-current-user'
+import { updateCurrentDatabase } from '../../../redux/actions/update-current-database'
+import { resetResult } from '../../../redux/actions/result-query'
 
 const SideBar = ({ width }) => {
   const themeMode = useSelector((state) => state.switchThemeMode)
@@ -17,6 +20,8 @@ const SideBar = ({ width }) => {
   const [treeDb, setTreeDb] = useState([])
   const [form] = Form.useForm()
   const [resetTreeDB, setResetTreeDB] = useState(false)
+  const currentUser = useSelector((state) => state.updateCurrentUser)
+  const dispatch = useDispatch()
   const handleSubmit = () => {
     form.submit()
     setAddDatabaseModal(false)
@@ -75,13 +80,31 @@ const SideBar = ({ width }) => {
                 shape={'default'}
                 type={'text'}
               />
-              <Button
-                icon={<AiOutlineMinus />}
-                size={'small'}
-                shape={'default'}
-                type={'text'}
-                onClick={() => setCollapsed(true)}
-              />
+              <div>
+                {currentUser && (
+                  <Tooltip title={'Logout'}>
+                    <Button
+                      icon={<AiOutlineLogout />}
+                      size={'small'}
+                      shape={'default'}
+                      type={'text'}
+                      onClick={() => {
+                        dispatch(updateCurrentUser(null))
+                        dispatch(updateCurrentDatabase(null))
+                        dispatch(resetResult())
+                        setExpanded([])
+                      }}
+                    />
+                  </Tooltip>
+                )}
+                <Button
+                  icon={<AiOutlineMinus />}
+                  size={'small'}
+                  shape={'default'}
+                  type={'text'}
+                  onClick={() => setCollapsed(true)}
+                />
+              </div>
             </>
           ) : (
             <Button

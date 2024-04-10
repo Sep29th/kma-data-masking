@@ -33,6 +33,8 @@ export const handleApplyResultQuery = (
           }
         }
       }
+    case 'RESET_RESULT_QUERY':
+      return { activeTab: '1', tabOneContent: [], tabTwoContent: {} }
     default:
       return state
   }

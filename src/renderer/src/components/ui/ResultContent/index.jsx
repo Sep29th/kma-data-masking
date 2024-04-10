@@ -1,15 +1,16 @@
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, Spin } from 'antd'
 import { Tabs } from 'antd'
 import StickyBox from 'react-sticky-box'
 import TableResult from '../TableResult'
 import { useSelector } from 'react-redux'
+import { ImSpinner10 } from 'react-icons/im'
 
 const ResultText = () => {
   const data = useSelector((state) => state.queryResult)
   return (
     <div style={{ paddingLeft: 25 }}>
       {data.tabOneContent.map((i) => (
-        <h4>{i}</h4>
+        <p>{i}</p>
       ))}
     </div>
   )
@@ -17,6 +18,7 @@ const ResultText = () => {
 
 const ResultContent = () => {
   const activeTab = useSelector((state) => state.queryResult)
+  const loading = useSelector((state) => state.resultLoading)
   const items = [
     {
       key: '1',
@@ -49,7 +51,14 @@ const ResultContent = () => {
       <Tabs
         defaultActiveKey="1"
         tabBarExtraContent={{
-          left: <span style={{ width: '25px', display: 'inline-block' }}></span>
+          left: <span style={{ width: '25px', display: 'inline-block' }}></span>,
+          right: loading && (
+            <Spin
+              indicator={<ImSpinner10 />}
+              size="large"
+              style={{ marginRight: 20, marginTop: 20 }}
+            />
+          )
         }}
         activeKey={activeTab.activeTab}
         size={'middle'}

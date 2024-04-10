@@ -37,6 +37,7 @@
   width: 80px;
   height: 80px;
 }
+
 .lds-facebook div {
   display: inline-block;
   position: absolute;
@@ -45,18 +46,22 @@
   background: #4c5052;
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
+
 .lds-facebook div:nth-child(1) {
   left: 8px;
   animation-delay: -0.24s;
 }
+
 .lds-facebook div:nth-child(2) {
   left: 32px;
   animation-delay: -0.12s;
 }
+
 .lds-facebook div:nth-child(3) {
   left: 56px;
   animation-delay: 0;
 }
+
 @keyframes lds-facebook {
   0% {
     top: 8px;
@@ -81,12 +86,20 @@
 #components-form-demo-normal-login .login-form {
   max-width: 300px;
 }
+
 #components-form-demo-normal-login .login-form-forgot {
   float: right;
 }
+
 #components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
   float: left;
 }
+
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
+}
+
+[data-rbd-droppable-id] {
+  height: 100%;
+  padding: 10px;
 }

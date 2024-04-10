@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { RunQuery } from '../../../services/run-query'
 import { useDispatch } from 'react-redux'
 import { applyResult } from '../../../redux/actions/result-query'
+import { resultLoading } from '../../../redux/actions/result-loading'
 
 const MainContent = () => {
   const [currentTab, setCurrentTab] = useState('1')
@@ -47,11 +48,13 @@ const MainContent = () => {
     </StickyBox>
   )
   const handleRunConsole = async () => {
+    dispatch(resultLoading(true))
     let selectionText = codeEditor.current.view.viewState.state.selection.ranges
       .map((i) => codeEditor.current.view.viewState.state.sliceDoc(i.from, i.to))
       .join('; ')
     if (!selectionText) selectionText = codeEditor.current.view.viewState.state.sliceDoc()
     const result = await RunQuery(selectionText, currentUser)
+    dispatch(resultLoading(false))
     dispatch(applyResult(result))
   }
   return (

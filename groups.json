@@ -1,8 +1,9 @@
 [
   {
-    "_id": "1",
-    "permission": ["create"],
+    "name": "new group",
+    "permission": ["update", "read"],
     "_databases": "1",
-    "_users": ["2"]
+    "_users": [],
+    "_id": "1"
   }
 ]
